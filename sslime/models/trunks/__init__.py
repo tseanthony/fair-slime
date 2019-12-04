@@ -9,5 +9,9 @@
 from sslime.models.trunks.alexnet_rotnet import AlexNet_RotNet
 from sslime.models.trunks.resnet50 import ResNet50
 from sslime.models.trunks.vgg_a import VGG_A
+from sslime.models.trunks.alexnet_jigsaw import AlexNet_Jigsaw
 
-TRUNKS = {"alexnet": AlexNet_RotNet, "resnet50": ResNet50, "vgg_a":VGG_A}
+TRUNKS = {"alexnet": AlexNet_RotNet,
+          "resnet50": ResNet50,
+          "vgg_a": VGG_A,
+          "alexnet_jigsaw": AlexNet_Jigsaw}
