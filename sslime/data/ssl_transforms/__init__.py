@@ -9,12 +9,16 @@
 import torchvision.transforms as transforms
 
 from sslime.data.ssl_transforms.ssl_rotate import SSL_IMG_ROTATE
+from sslime.data.ssl_transforms.ssl_jigsaw import SSL_IMG_JIGSAW
 from sslime.data.ssl_transforms.basic_transforms_wrapper import (
     TORCHVISION_TRANSFORMS,
     TorchVisionTransformsWrapper,
 )
 
-TRANSFORMS = {"ssl_rotate": SSL_IMG_ROTATE}
+TRANSFORMS = {
+    "ssl_rotate": SSL_IMG_ROTATE,
+    "ssl_jigsaw": SSL_IMG_JIGSAW,
+}
 
 
 def get_transform(transforms_list):
