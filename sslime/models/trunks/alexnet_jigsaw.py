@@ -13,7 +13,7 @@ class AlexNet(nn.Module):
         super(AlexNet, self).__init__()
 
         conv1 = nn.Sequential(
-            nn.Conv2d(3, 96, kernel_size=11, stride=4, padding=2),
+            nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
             nn.ReLU(inplace=True),
         )
         pool1 = nn.MaxPool2d(kernel_size=3, stride=2)
@@ -121,13 +121,13 @@ class Jigsaw(AlexNet):
             batch_dim, jigsaw_dim, _, _, _ = feat.size()
             feat = feat.transpose(0, 1)
 
-            output = torch.tensor([])
+            output = []
             for i in range(9):
                 jigsaw_piece = feat[i]
                 for layer in self._feature_blocks:
                     jigsaw_piece = layer(jigsaw_piece)
                 jigsaw_piece = self.fc6(jigsaw_piece)
-                output = torch.cat([output, jigsaw_piece], dim=1)
-
+                output.append(jigsaw_piece)
+            output = torch.cat(output, dim=1)
             return [output]
 
