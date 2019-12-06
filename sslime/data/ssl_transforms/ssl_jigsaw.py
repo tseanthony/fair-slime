@@ -27,8 +27,15 @@ class SSL_IMG_JIGSAW(object):
         label = np.random.randint(0, self.perms.shape[0])
         return tiles[self.perms[label]], label
 
+    def _color_channels_jitter(self, img):
+        h, w = img.size
+        channels = img.split()
+        cropper = T.RandomCrop((h - 2, w - 2))
+        return Image.merge('RGB', [cropper(c) for c in channels])
+
     def _tile_transform(self, tile):
         tile = T.Compose([
+            T.Lambda(self._color_channels_jitter),
             T.RandomCrop(64),
             T.ToTensor(),
         ])(tile)
