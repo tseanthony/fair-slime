@@ -12,6 +12,7 @@ TORCHVISION_TRANSFORMS = {
     "CenterCrop": transforms.CenterCrop,
     "ColorJitter": transforms.ColorJitter,
     "Grayscale": transforms.Grayscale,
+    "RandomGrayscale": transforms.RandomGrayscale,
     "Normalize": transforms.Normalize,
     "RandomHorizontalFlip": transforms.RandomHorizontalFlip,
     "RandomResizedCrop": transforms.RandomResizedCrop,
