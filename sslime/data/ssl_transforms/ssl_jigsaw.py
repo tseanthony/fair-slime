@@ -3,22 +3,16 @@ import torch
 import torchvision.transforms as T
 import torchvision.transforms.functional as TF
 
-from sslime.core.config import config as cfg
-
 
 class SSL_IMG_JIGSAW(object):
     def __init__(self, indices, perms_path):
         self.indices = set(indices)
-        if cfg[split].MMAP_MODE:
-            self.perms = np.load(perms_path, mmap_mode="r")
-        else:
-            self.perms = np.load(perms_path)
+        self.perms = np.load(perms_path)
 
     def _transform(self, img, count=3, size=255):
         img = T.Compose([
             T.CenterCrop(85),
             T.Resize(size),
-            T.RandomGrayscale(p=.3)
         ])(img)
 
         tiles = []
