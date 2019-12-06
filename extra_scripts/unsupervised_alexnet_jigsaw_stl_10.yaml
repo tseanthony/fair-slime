@@ -7,23 +7,20 @@ TRAIN:
   MMAP_MODE: True
   DEFAULT_GRAY_IMG_SIZE: 96
   TRANSFORMS: [
-      ["RandomHorizontalFlip"],
-      ["ToTensor"],
-      ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
+    ["RandomGrayscale", {"args": [0.3]}],
+    ["ssl_jigsaw", {"indices":[0], "args": ["path/to/permutations_1000.npy"]}],
   ]
 
 TEST:
   DATA_SOURCES: [disk]
   DATA_PATHS: ["path/to/unsupervised_test_images.npy"]
   LABEL_SOURCES: [disk]
-  LABEL_PATHS: [] 
+  LABEL_PATHS: []
   BATCH_SIZE: 128
   MMAP_MODE: True
   DEFAULT_GRAY_IMG_SIZE: 96
   TRANSFORMS: [
-    ["ssl_rotate", {"indices":[0]}],
-    ["ToTensor"],
-    ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
+    ["ssl_jigsaw", {"indices":[0], "args": "path/to/unsupervised_train_images.npy"}],
   ]
 
 
