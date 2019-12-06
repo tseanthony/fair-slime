@@ -7,19 +7,13 @@ import torch.nn as nn
 from sslime.core.config import config as cfg
 from sslime.utils.utils import Flatten, parse_out_keys_arg
 
-# Adapted from https://github.com/pytorch/vision/blob/master/torchvision/models/alexnet.py
-
-class AlexNet_Jigsaw(nn.Module):
+# Referenced https://github.com/pytorch/vision/blob/master/torchvision/models/alexnet.py
+class AlexNet(nn.Module):
     def __init__(self):
-        super(AlexNet_Jigsaw, self).__init__()
-
-        # During training, stride of the first layer of cfn is 2 instead of 4
-        first_layer_stride = 2
-        if cfg.MODEL.FEATURE_EVAL_MODE:
-            first_layer_stride = 4
+        super(AlexNet, self).__init__()
 
         conv1 = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=11, stride=first_layer_stride, padding=2),
+            nn.Conv2d(3, 96, kernel_size=11, stride=4, padding=2),
             nn.ReLU(inplace=True),
         )
         pool1 = nn.MaxPool2d(kernel_size=3, stride=2)
@@ -60,7 +54,6 @@ class AlexNet_Jigsaw(nn.Module):
         ]
         assert len(self.all_feat_names) == len(self._feature_blocks)
 
-
     def forward(self, x, out_feat_keys=None):
         """Forward an image `x` through the network and return the asked output features.
 
@@ -89,3 +82,49 @@ class AlexNet_Jigsaw(nn.Module):
                 out_feats[out_feat_keys.index(key)] = feat
 
         return out_feats
+
+class Jigsaw(AlexNet):
+    def __init__(self):
+        super(Jigsaw, self).__init__()
+
+        # Pretext Training: stride of the first layer of cfn is 2 instead of 4, change fc dimensions
+        if not cfg.MODEL.FEATURE_EVAL_MODE:
+            self._feature_blocks[0].stride = (2,2)
+
+    def forward(self, x, out_feat_keys=None):
+        """
+        Override forward function of standard AlexNet
+        """
+
+        feat = x
+
+        if cfg.MODEL.FEATURE_EVAL_MODE:
+            # Evaluation of SSL features
+
+            out_feat_keys, max_out_feat = parse_out_keys_arg(
+                out_feat_keys, self.all_feat_names
+            )
+            out_feats = [None] * len(out_feat_keys)
+
+            for f in range(max_out_feat + 1):
+                feat = self._feature_blocks[f](feat)
+                key = self.all_feat_names[f]
+                if key in out_feat_keys:
+                    out_feats[out_feat_keys.index(key)] = feat
+            return out_feats
+
+        else:
+            # Pretext Training: process each puzzle piece through model
+
+            batch_dim, jigsaw_dim, _, _, _ = feat.size()
+            feat = feat.transpose(0, 1)
+
+            output = torch.tensor([])
+            for i in range(9):
+                jigsaw_piece = feat[i]
+                for layer in self._feature_blocks:
+                    jigsaw_piece = layer(jigsaw_piece)
+                output = torch.cat([output, jigsaw_piece], dim=1)
+
+            return [output]
+
