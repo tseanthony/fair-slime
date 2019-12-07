@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torchvision.transforms as T
 import torchvision.transforms.functional as TF
-
+from PIL import Image
 
 class SSL_IMG_JIGSAW(object):
     def __init__(self, indices, perms_path):
