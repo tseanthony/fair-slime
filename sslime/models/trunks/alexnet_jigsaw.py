@@ -1,4 +1,3 @@
-
 # input size are 64 x 64 tiles from a 75 x 75 grid
 
 import torch
@@ -90,8 +89,10 @@ class Jigsaw(AlexNet):
         # Pretext Training: stride of the first layer of cfn is 2 instead of 4, change fc dimensions
         if not cfg.MODEL.FEATURE_EVAL_MODE:
             self._feature_blocks[0][0].stride = (2,2)
-            self.fc6 = nn.Linear(1024, 512)
-
+            self.fc6 = nn.Sequential(
+                nn.Linear(1024, 512),
+                nn.ReLU(inplace=True),
+            )
 
     def forward(self, x, out_feat_keys=None):
         """
@@ -130,4 +131,3 @@ class Jigsaw(AlexNet):
                 output.append(jigsaw_piece)
             output = torch.cat(output, dim=1)
             return [output]
-

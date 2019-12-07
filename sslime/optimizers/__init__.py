@@ -14,7 +14,10 @@ import torch.optim as optim
 from sslime.core.config import config as cfg
 
 logger = logging.getLogger(__name__)
-OPTIMIZERS = {"sgd": optim.SGD}
+OPTIMIZERS = {
+    "sgd": optim.SGD,
+    "adam": optim.Adam,
+}
 
 
 def group_params_by_decay(model):
@@ -66,9 +69,7 @@ def get_optimizer(model):
     optimizer = OPTIMIZERS[cfg.OPTIMIZER.TYPE](
         optimizer_grouped_parameters,
         lr=cfg.OPTIMIZER.BASE_LR,
-        momentum=cfg.OPTIMIZER.MOMENTUM,
-        dampening=cfg.OPTIMIZER.DAMPENING,
-        nesterov=cfg.OPTIMIZER.NESTEROV,
+        **cfg.OPTIMIZER.KWARGS
     )
 
     logger.info(optimizer)
