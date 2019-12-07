@@ -18,6 +18,7 @@ TORCHVISION_TRANSFORMS = {
     "RandomResizedCrop": transforms.RandomResizedCrop,
     "Resize": transforms.Resize,
     "ToTensor": transforms.ToTensor,
+    "ToPILImage": transforms.ToPILImage,
 }
 
 
