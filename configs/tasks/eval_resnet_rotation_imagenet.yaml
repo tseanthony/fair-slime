@@ -66,8 +66,7 @@ OPTIMIZER:
 
 SCHEDULER:
   TYPE: "step"
-  STEP_SIZE: 8
-  GAMMA: 0.1
+  KWARGS: {'step_size': 8, 'gamma': 0.1}
 
 CHECKPOINT:
   DIR: "."

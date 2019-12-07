@@ -11,7 +11,10 @@ import torch.optim as optim
 from sslime.core.config import config as cfg
 
 
-SCHEDULERS = {"step": optim.lr_scheduler.StepLR}
+SCHEDULERS = {
+    "step": optim.lr_scheduler.StepLR,
+    "plateau":optim.lr_scheduler.ReduceLROnPlateau,
+}
 
 
 def get_scheduler(optimizer):
@@ -21,6 +24,6 @@ def get_scheduler(optimizer):
         cfg.SCHEDULER.TYPE, list(SCHEDULERS.keys())
     )
     scheduler = SCHEDULERS[cfg.SCHEDULER.TYPE](
-        optimizer, step_size=cfg.SCHEDULER.STEP_SIZE, gamma=cfg.SCHEDULER.GAMMA
+        optimizer, **cfg.SCHEDULER.KWARGS
     )
     return scheduler

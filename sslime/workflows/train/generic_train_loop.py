@@ -18,6 +18,10 @@ from sslime.utils.utils import is_log_iter, log_train_stats
 logger = logging.getLogger(__name__)
 
 
+def get_meters_by_names(meters, names):
+    mapping = {m.name: m for m in meters}
+    return filter(None, [mapping.get(n) for n in names])
+
 def generic_train_loop(train_loader, model, criterion, optimizer, scheduler, i_epoch):
     model.train()
     train_meters = [
@@ -41,7 +45,8 @@ def generic_train_loop(train_loader, model, criterion, optimizer, scheduler, i_e
                 i_epoch, i_batch, len(train_loader), optimizer, train_meters
             )
 
-    scheduler.step()
+    step_meters = get_meters_by_names(train_meters, cfg.SCHEDULER.STEP_METERS)
+    scheduler.step(*[m.value for m in step_meters])
     logger.info(f"Epoch: {i_epoch + 1}. Train Stats")
     for meter in train_meters:
         logger.info(meter)

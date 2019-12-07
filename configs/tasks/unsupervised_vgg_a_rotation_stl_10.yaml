@@ -54,8 +54,7 @@ OPTIMIZER:
 
 SCHEDULER:
   TYPE: "step"
-  STEP_SIZE: 25
-  GAMMA: 0.1
+  KWARGS: {'step_size': 25, 'gamma': 0.1}
 
 CHECKPOINT:
   DIR: "./checkpoint_unsupervised_training"
