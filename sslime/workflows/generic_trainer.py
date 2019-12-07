@@ -48,22 +48,6 @@ class Trainer:
         logger.info("System config:\n{}".format(get_pretty_env_info()))
 
         model = BaseImageSSLModel()
-        criterion = get_criterion()
-        optimizer = get_optimizer(model)
-        scheduler = get_scheduler(optimizer)
-
-        logger.info(model)
-
-        start_epoch = 0
-        if cfg.TRAINER.AUTO_RESUME and checkpoint.has_checkpoint():
-            last_checkpoint = checkpoint.get_last_checkpoint()
-            checkpoint_epoch = checkpoint.load_checkpoint(
-                last_checkpoint, model, optimizer, scheduler
-            )
-            logger.info("Loaded checkpoint from: {}".format(last_checkpoint))
-            if not cfg.TRAINER.RESET_START_EPOCH:
-                start_epoch = checkpoint_epoch + 1
-
         if torch.cuda.is_available():
             if len(cfg.GPU_IDS) > 1 or (
                 len(cfg.GPU_IDS) == 0 and torch.cuda.device_count() > 1
@@ -80,6 +64,22 @@ class Trainer:
                 torch.cuda.set_device(cfg.GPU_IDS[0])
 
             model.cuda()
+
+        criterion = get_criterion()
+        optimizer = get_optimizer(model)
+        scheduler = get_scheduler(optimizer)
+
+        logger.info(model)
+
+        start_epoch = 0
+        if cfg.TRAINER.AUTO_RESUME and checkpoint.has_checkpoint():
+            last_checkpoint = checkpoint.get_last_checkpoint()
+            checkpoint_epoch = checkpoint.load_checkpoint(
+                last_checkpoint, model, optimizer, scheduler
+            )
+            logger.info("Loaded checkpoint from: {}".format(last_checkpoint))
+            if not cfg.TRAINER.RESET_START_EPOCH:
+                start_epoch = checkpoint_epoch + 1
 
         train_dataset = GenericSSLDataset("TRAIN")
         train_loader = DataLoader(
