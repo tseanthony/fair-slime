@@ -36,7 +36,7 @@ class AlexNet(nn.Module):
         )
         pool5 = nn.MaxPool2d(kernel_size=3, stride=2)
 
-        flatten = Flatten()
+        flatten = Flatten(1)
 
         self._feature_blocks = nn.ModuleList(
             [conv1, pool1, conv2, pool2, conv3, conv4, conv5, pool5, flatten]
@@ -89,7 +89,7 @@ class Jigsaw(AlexNet):
 
         # Pretext Training: stride of the first layer of cfn is 2 instead of 4, change fc dimensions
         if not cfg.MODEL.FEATURE_EVAL_MODE:
-            self._feature_blocks[0].stride = (2,2)
+            self._feature_blocks[0][0].stride = (2,2)
             self.fc6 = nn.Linear(1024, 512)
 
 
