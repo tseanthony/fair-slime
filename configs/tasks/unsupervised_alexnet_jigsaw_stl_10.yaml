@@ -23,10 +23,10 @@ TEST:
   MMAP_MODE: True
   DEFAULT_GRAY_IMG_SIZE: 96
   TRANSFORMS: [
-    ["ssl_jigsaw", {"indices":[0], "args": ["data/permutations_1000.npy"]}],
     ["ToTensor"],
     ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
     ["ToPILImage"],
+    ["ssl_jigsaw", {"indices":[0], "args": ["data/permutations_1000.npy"]}],
   ]
 
 
