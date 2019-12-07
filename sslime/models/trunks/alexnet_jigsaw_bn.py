@@ -97,8 +97,8 @@ class Jigsaw_BN(AlexNet_BN):
             self._feature_blocks[0][0].stride = (2,2)
             self.fc6 = nn.Sequential(
                 nn.Linear(1024, 512),
-                nn.ReLU(inplace=True),
                 nn.BatchNorm1d(512),
+                nn.ReLU(inplace=True),
             )
 
     def forward(self, x, out_feat_keys=None):
