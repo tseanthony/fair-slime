@@ -60,10 +60,8 @@ TRAINER:
 OPTIMIZER:
   TYPE: "sgd"
   BASE_LR: 0.01
-  MOMENTUM: 0.9
   WEIGHT_DECAY: 0.0005
-  DAMPENING: 0
-  NESTEROV: True
+  KWARGS: {'momentum': 0.9, 'dampening': 0, 'nesterov': True}
 
 SCHEDULER:
   TYPE: "step"
@@ -75,4 +73,3 @@ CHECKPOINT:
   FEATURE_EXTRACTOR_PARAMS: "path/to/unsupervised/model/checkpoint.pyth"
 
 VERBOSE: True
-

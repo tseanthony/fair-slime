@@ -47,10 +47,8 @@ TRAINER:
 OPTIMIZER:
   TYPE: "sgd"
   BASE_LR: 0.01
-  MOMENTUM: 0.9
   WEIGHT_DECAY: 0.0001
-  DAMPENING: 0
-  NESTEROV: True
+  KWARGS: {'momentum': 0.9, 'dampening': 0, 'nesterov': True}
 
 SCHEDULER:
   TYPE: "step"
