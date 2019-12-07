@@ -1,6 +1,6 @@
 TRAIN:
   DATA_SOURCES: [disk]
-  DATA_PATHS: [ "path/to/unsupervised_train_images.npy"]
+  DATA_PATHS: [ "data/unsupervised_train_images.npy"]
   LABEL_SOURCES: [disk]
   LABEL_PATHS: []
   BATCH_SIZE: 256
@@ -8,19 +8,19 @@ TRAIN:
   DEFAULT_GRAY_IMG_SIZE: 96
   TRANSFORMS: [
     ["RandomGrayscale", {"args": [0.3]}],
-    ["ssl_jigsaw", {"indices":[0], "args": ["path/to/permutations_1000.npy"]}],
+    ["ssl_jigsaw", {"indices":[0], "args": ["data/permutations_1000.npy"]}],
   ]
 
 TEST:
   DATA_SOURCES: [disk]
-  DATA_PATHS: ["path/to/unsupervised_test_images.npy"]
+  DATA_PATHS: ["data/unsupervised_test_images.npy"]
   LABEL_SOURCES: [disk]
   LABEL_PATHS: []
   BATCH_SIZE: 128
   MMAP_MODE: True
   DEFAULT_GRAY_IMG_SIZE: 96
   TRANSFORMS: [
-    ["ssl_jigsaw", {"indices":[0], "args": ["path/to/unsupervised_train_images.npy"]}],
+    ["ssl_jigsaw", {"indices":[0], "args": ["data/permutations_1000.npy"]}],
   ]
 
 
