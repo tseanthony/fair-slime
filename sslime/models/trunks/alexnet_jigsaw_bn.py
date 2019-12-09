@@ -12,6 +12,8 @@ class AlexNet_BN(nn.Module):
     def __init__(self):
         super(AlexNet_BN, self).__init__()
 
+        bn0 = nn.BatchNorm2d(3)
+
         conv1 = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
             nn.BatchNorm2d(64),
@@ -44,9 +46,10 @@ class AlexNet_BN(nn.Module):
         flatten = Flatten(1)
 
         self._feature_blocks = nn.ModuleList(
-            [conv1, pool1, conv2, pool2, conv3, conv4, conv5, pool5, flatten]
+            [bn0, conv1, pool1, conv2, pool2, conv3, conv4, conv5, pool5, flatten]
         )
         self.all_feat_names = [
+            "bn0"
             "conv1",
             "pool1",
             "conv2",
@@ -58,10 +61,6 @@ class AlexNet_BN(nn.Module):
             "flatten",
         ]
         assert len(self.all_feat_names) == len(self._feature_blocks)
-
-        for m in self._feature_blocks:
-            if isinstance(m[0], nn.Conv2d):
-                nn.init.kaiming_normal_(m[0].weight, mode='fan_out', nonlinearity='relu')
 
     def forward(self, x, out_feat_keys=None):
         """Forward an image `x` through the network and return the asked output features.
