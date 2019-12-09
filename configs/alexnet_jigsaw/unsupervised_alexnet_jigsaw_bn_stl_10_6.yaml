@@ -23,7 +23,6 @@ TEST:
     ["ssl_jigsaw", {"indices":[0], "args": ["/scratch/at4091/stl10/data/permutations_100.npy"]}],
   ]
 
-
 MODEL:
   TRUNK:
     TYPE: "alexnet_jigsaw_bn"
@@ -44,7 +43,7 @@ TRAINER:
 
 OPTIMIZER:
   TYPE: "adam"
-  BASE_LR: 0.0001
+  BASE_LR: 0.001
   WEIGHT_DECAY: 0.0001
 
 SCHEDULER:
@@ -53,6 +52,6 @@ SCHEDULER:
   STEP_METERS: ["loss"]
 
 CHECKPOINT:
-  DIR: "./checkpoint_unsupervised_training"
+  DIR: "./checkpoint6"
 
 VERBOSE: True

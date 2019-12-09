@@ -44,7 +44,7 @@ TRAINER:
 
 OPTIMIZER:
   TYPE: "adam"
-  BASE_LR: 0.01
+  BASE_LR: 0.1
   WEIGHT_DECAY: 0.0001
 
 SCHEDULER:
@@ -53,6 +53,6 @@ SCHEDULER:
   STEP_METERS: ["loss"]
 
 CHECKPOINT:
-  DIR: "./checkpoint_unsupervised_training"
+  DIR: "./checkpoint4"
 
 VERBOSE: True

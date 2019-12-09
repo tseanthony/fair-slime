@@ -59,6 +59,10 @@ class AlexNet_BN(nn.Module):
         ]
         assert len(self.all_feat_names) == len(self._feature_blocks)
 
+        for m in self._feature_blocks:
+            if isinstance(m[0], nn.Conv2d):
+                nn.init.kaiming_normal_(m[0].weight, mode='fan_out', nonlinearity='relu')
+
     def forward(self, x, out_feat_keys=None):
         """Forward an image `x` through the network and return the asked output features.
 
