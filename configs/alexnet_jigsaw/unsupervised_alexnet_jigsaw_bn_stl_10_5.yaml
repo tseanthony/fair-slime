@@ -20,7 +20,7 @@ TEST:
   MMAP_MODE: True
   DEFAULT_GRAY_IMG_SIZE: 96
   TRANSFORMS: [
-    ["ssl_jigsaw", {"indices":[0], "args": ["/scratch/at4091/stl10/data/unsupervised_train_images.npy"]}],
+    ["ssl_jigsaw", {"indices":[0], "args": ["/scratch/at4091/stl10/data/permutations_100.npy"]}],
   ]
 
 

@@ -16,16 +16,16 @@ class SSL_IMG_JIGSAW(object):
         ])(img)
 
         tiles = []
-        cs = size / count       # crop size
+        cs = size // count       # crop size
         for i in range(count):
             for j in range(count):
                 tile = TF.crop(img, cs*i, cs*j, cs, cs)
                 tile = self._tile_transform(tile)
                 tiles.append(tile)
 
-        tiles = torch.stack(tiles)
         label = np.random.randint(0, self.perms.shape[0])
-        return tiles[self.perms[label]], label
+        tiles = [tiles[i] for i in self.perms[label]]
+        return torch.stack(tiles), label
 
     def _color_channels_jitter(self, img):
         h, w = img.size
