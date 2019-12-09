@@ -13,9 +13,9 @@ NOTES for testing
 
     Since no global normalization is done in image preprocessing, We test adding BN layers to the conv and fc
 
-    unsupervised_alexnet_jigsaw_bn_stl10_1.yaml: ADAM, lr = 0.01
-    unsupervised_alexnet_jigsaw_bn_stl10_2.yaml: ADAM, lr = 0.001
-    unsupervised_alexnet_jigsaw_bn_stl10_3.yaml: ADAM, lr = 0.0001
-    unsupervised_alexnet_jigsaw_bn_stl10_4.yaml: SGD, lr = 0.01
-    unsupervised_alexnet_jigsaw_bn_stl10_5.yaml: SGD, lr = 0.001
-    unsupervised_alexnet_jigsaw_bn_stl10_6.yaml: SGD, lr = 0.0001
+    unsupervised_alexnet_jigsaw_bn_stl10_1.yaml: ADAM, lr = 0.01, 1000permutation
+    unsupervised_alexnet_jigsaw_bn_stl10_2.yaml: ADAM, lr = 0.001, 1000permutation
+    unsupervised_alexnet_jigsaw_bn_stl10_3.yaml: ADAM, lr = 0.0001, 1000permutation
+    unsupervised_alexnet_jigsaw_bn_stl10_4.yaml: ADAM, lr = 0.01, 100permutation
+    unsupervised_alexnet_jigsaw_bn_stl10_5.yaml: ADAM, lr = 0.001, 100permutation
+    unsupervised_alexnet_jigsaw_bn_stl10_6.yaml: ADAM, lr = 0.0001, 100permutation
