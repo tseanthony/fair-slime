@@ -11,9 +11,11 @@ from sslime.models.trunks.resnet50 import ResNet50
 from sslime.models.trunks.vgg_a import VGG_A
 from sslime.models.trunks.alexnet_jigsaw import Jigsaw
 from sslime.models.trunks.alexnet_jigsaw_bn import Jigsaw_BN
+from sslime.models.trunks.cfn import CFN
 
 TRUNKS = {"alexnet": AlexNet_RotNet,
           "resnet50": ResNet50,
           "vgg_a": VGG_A,
+          "cfn": CFN,
           "alexnet_jigsaw": Jigsaw,
           "alexnet_jigsaw_bn": Jigsaw_BN}
