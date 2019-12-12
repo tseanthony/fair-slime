@@ -1,0 +1,63 @@
+TRAIN:
+  DATA_SOURCES: [disk]
+  DATA_PATHS: [ "data/unsupervised_train_images.npy"]
+  LABEL_SOURCES: [disk]
+  LABEL_PATHS: []
+  BATCH_SIZE: 256
+  MMAP_MODE: True
+  DEFAULT_GRAY_IMG_SIZE: 96
+  TRANSFORMS: [
+      ["ssl_rotate", {"indices": [0]}],
+      ["RandomHorizontalFlip"],
+      ["ToTensor"],
+      ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
+  ]
+
+TEST:
+  DATA_SOURCES: [disk]
+  DATA_PATHS: ["data/unsupervised_test_images.npy"]
+  LABEL_SOURCES: [disk]
+  LABEL_PATHS: []
+  BATCH_SIZE: 128
+  MMAP_MODE: True
+  DEFAULT_GRAY_IMG_SIZE: 96
+  TRANSFORMS: [
+      ["ssl_rotate", {"indices": [0]}],
+      ["RandomHorizontalFlip"],
+      ["ToTensor"],
+      ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
+  ]
+
+
+MODEL:
+  TRUNK:
+    TYPE: "alexnet"
+  HEAD:
+    PARAMS: [["mlp", {"dims": [512, 512, 10]}]]
+    APPLY_BATCHNORM: False
+  FEATURE_EVAL_MODE: False
+  EVAL_FEATURES: []
+
+# Training Parameters
+TRAINER:
+  TRAIN_LOOP: "generic_train_loop"
+  TRAIN_METERS: {"accuracy": {"topk": [1, 5]}, "loss": {}}
+  EVAL_LOOP: "generic_eval_loop"
+  EVAL_METERS: {"accuracy": {"topk": [1, 5]}, "loss": {}}
+  MAX_EPOCHS: 90
+  NUM_WORKERS: 20
+
+OPTIMIZER:
+  TYPE: "adam"
+  BASE_LR: 0.001
+  WEIGHT_DECAY: 0.0
+
+SCHEDULER:
+  TYPE: "plateau"
+  KWARGS: {"patience": 100, "verbose": True, "threshold": .01}
+  STEP_METERS: ["loss"]
+
+CHECKPOINT:
+  DIR: "./checkpoint/pretext_alexnet_rotnet_1"
+
+VERBOSE: True
