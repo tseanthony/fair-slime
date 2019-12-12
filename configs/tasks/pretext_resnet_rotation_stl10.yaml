@@ -27,6 +27,7 @@ TEST:
 MODEL:
   TRUNK:
     TYPE: "resnet50"
+    KWARGS: {'k': 2}
   HEAD:
     PARAMS: [["mlp", {"dims": [2048, 4]}]]
     APPLY_BATCHNORM: True
