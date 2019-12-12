@@ -22,6 +22,7 @@ from sslime.models.SSLModel import BaseImageSSLModel
 from sslime.optimizers import get_optimizer
 from sslime.schedulers import get_scheduler
 from sslime.utils.timer import Timer
+from sslime.utils.visdom import get_visdom_plotter
 from sslime.utils.utils import is_eval_epoch, log_post_epoch_timer_stats
 from sslime.workflows.eval import EVAL_LOOPS
 from sslime.workflows.train import TRAIN_LOOPS
@@ -102,19 +103,20 @@ class Trainer:
 
         train_timer = Timer()
         test_timer = Timer()
+        plotter = get_visdom_plotter()
 
         logger.info("=> Training model...")
         for i_epoch in range(start_epoch, cfg.TRAINER.MAX_EPOCHS):
             train_timer.tic()
             self.train_loop(
-                train_loader, model, criterion, optimizer, scheduler, i_epoch
+                train_loader, model, criterion, optimizer, scheduler, plotter, i_epoch
             )
             train_timer.toc()
             if checkpoint.is_checkpoint_epoch(i_epoch):
                 checkpoint.save_checkpoint(model, optimizer, scheduler, i_epoch)
             if cfg.TRAINER.EVAL_MODEL and is_eval_epoch(i_epoch):
                 test_timer.tic()
-                self.eval_loop(val_loader, model, i_epoch)
+                self.eval_loop(val_loader, model, plotter, i_epoch)
                 test_timer.toc()
 
             log_post_epoch_timer_stats(train_timer, test_timer, i_epoch)

@@ -17,7 +17,7 @@ from sslime.meters import METERS
 logger = logging.getLogger(__name__)
 
 
-def generic_eval_loop(val_loader, model, i_epoch):
+def generic_eval_loop(val_loader, model, plotter, i_epoch):
     model.eval()
     eval_meters = [
         METERS[meter](**cfg.TRAINER.EVAL_METERS[meter])
@@ -35,3 +35,6 @@ def generic_eval_loop(val_loader, model, i_epoch):
     logger.info("Epoch: {}. Validation Stats".format(i_epoch + 1))
     for meter in eval_meters:
         logger.info(meter)
+        value = meter.value
+        value = value['top_1'] if isinstance(value, dict) else value
+        plotter.plot(meter.name, 'val', i_epoch + 1, value)

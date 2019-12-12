@@ -22,7 +22,7 @@ def get_meters_by_names(meters, names):
     mapping = {m.name: m for m in meters}
     return filter(None, [mapping.get(n) for n in names])
 
-def generic_train_loop(train_loader, model, criterion, optimizer, scheduler, i_epoch):
+def generic_train_loop(train_loader, model, criterion, optimizer, scheduler, plotter, i_epoch):
     model.train()
     train_meters = [
         METERS[meter](**cfg.TRAINER.TRAIN_METERS[meter])
@@ -50,3 +50,6 @@ def generic_train_loop(train_loader, model, criterion, optimizer, scheduler, i_e
     logger.info(f"Epoch: {i_epoch + 1}. Train Stats")
     for meter in train_meters:
         logger.info(meter)
+        value = meter.value
+        value = value['top_1'] if isinstance(value, dict) else value
+        plotter.plot(meter.name, 'train', i_epoch + 1, value)

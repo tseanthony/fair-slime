@@ -1,0 +1,66 @@
+TRAIN:
+  DATA_SOURCES: [disk]
+  DATA_PATHS: ["data/train_images_0.npy"]
+  LABEL_SOURCES: [disk]
+  LABEL_PATHS: ["data/train_labels_0.npy"]
+  BATCH_SIZE: 64
+  MMAP_MODE: True
+  DEFAULT_GRAY_IMG_SIZE: 96
+  TRANSFORMS: [
+      ["RandomHorizontalFlip"],
+      ["ToTensor"],
+      ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
+  ]
+
+TEST:
+  DATA_SOURCES: [disk]
+  DATA_PATHS: ["data/test_images.npy"]
+  LABEL_SOURCES: [disk]
+  LABEL_PATHS: ["data/test_labels.npy"]
+  BATCH_SIZE: 64
+  MMAP_MODE: True
+  DEFAULT_GRAY_IMG_SIZE: 96
+  TRANSFORMS: [
+    ["ToTensor"],
+    ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
+  ]
+
+
+MODEL:
+  TRUNK:
+    TYPE: "resnet50"
+  HEAD:
+    PARAMS: [["mlp", {"dims": [2048, 10]}]]
+    APPLY_BATCHNORM: True
+  FEATURE_EVAL_MODE: False
+  EVAL_FEATURES: []
+
+# Training Parameters
+TRAINER:
+  # CRITERION: "cross_entropy"
+  TRAIN_LOOP: "generic_train_loop"
+  TRAIN_METERS: {"accuracy": {"topk": [1]}, "loss": {}}
+  EVAL_LOOP: "generic_eval_loop"
+  EVAL_METERS: {"accuracy": {"topk": [1]}, "loss": {}}
+  MAX_EPOCHS: 90
+
+OPTIMIZER:
+  TYPE: "adam"
+  BASE_LR: 0.001
+  # TYPE: "sgd"
+  # BASE_LR: 0.01
+  WEIGHT_DECAY: 0.0001
+  # KWARGS: {'momentum': 0.9, 'dampening': 0, 'nesterov': True}
+
+SCHEDULER:
+  TYPE: "step"
+  KWARGS: {'step_size': 30, 'gamma': 0.1}
+
+CHECKPOINT:
+  DIR: "./checkpoint/supervised_resnet_test"
+
+VISDOM:
+  ENV: "supervised_resnet"
+  CONFIG: {"server": "log-0"}
+
+VERBOSE: True

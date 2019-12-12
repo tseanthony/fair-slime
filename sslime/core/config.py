@@ -115,6 +115,11 @@ __C.CHECKPOINT.CHECKPOINT_PERIOD = 1
 __C.CHECKPOINT.DIR = "/path/to/save/checkpoint/location"
 __C.CHECKPOINT.FEATURE_EXTRACTOR_PARAMS = ""
 
+
+__C.VISDOM = AttrDict()
+__C.VISDOM.ENV = "main"
+__C.VISDOM.CONFIG = {}
+
 __C.VERBOSE = True
 
 
