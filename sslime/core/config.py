@@ -56,6 +56,7 @@ __C.TEST.TRANSFORMS = []
 __C.MODEL = AttrDict()
 __C.MODEL.TRUNK = AttrDict()
 __C.MODEL.TRUNK.TYPE = "alexnet"
+__C.MODEL.TRUNK.KWARGS = {}
 __C.MODEL.TRUNK.LINEAR_FEAT_POOL_OPS = [
     ("AdaptiveMaxPool2d", [12]),
     ("AdaptiveMaxPool2d", [7]),

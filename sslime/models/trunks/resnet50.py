@@ -7,7 +7,7 @@
 #
 
 import torch.nn as nn
-import torchvision.models as models
+import torchvision.models.resnet as models
 
 from sslime.utils.utils import Flatten, parse_out_keys_arg
 
@@ -16,9 +16,10 @@ class ResNet50(nn.Module):
     """Wrapper for TorchVison ResNet50 Model
     This was needed to remove the final FC Layer from the ResNet Model"""
 
-    def __init__(self):
+    def __init__(self, k=1):
         super(ResNet50, self).__init__()
-        model = models.resnet50()
+        kwargs = {'width_per_group': 64 * k, 'pretrained':False, 'progress':True}
+        model = models._resnet('resnet50', models.Bottleneck, [3, 4, 6, 3], **kwargs)
         conv1 = nn.Sequential(model.conv1, model.bn1, model.relu)
 
         self._feature_blocks = nn.ModuleList(
