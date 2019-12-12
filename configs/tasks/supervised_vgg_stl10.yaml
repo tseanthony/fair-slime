@@ -1,8 +1,8 @@
 TRAIN:
   DATA_SOURCES: [disk]
-  DATA_PATHS: ["path/to/train_images_0.npy"]
+  DATA_PATHS: ["data/train_images_0.npy"]
   LABEL_SOURCES: [disk]
-  LABEL_PATHS: ["path/to/train_labels_0.npy"]
+  LABEL_PATHS: ["data/train_labels_0.npy"]
   BATCH_SIZE: 32
   MMAP_MODE: True
   DEFAULT_GRAY_IMG_SIZE: 96
@@ -14,9 +14,9 @@ TRAIN:
 
 TEST:
   DATA_SOURCES: [disk]
-  DATA_PATHS: ["path/to/test_images.npy"]
+  DATA_PATHS: ["data/test_images.npy"]
   LABEL_SOURCES: [disk]
-  LABEL_PATHS: ["path/to/test_labels.npy"]
+  LABEL_PATHS: ["data/test_labels.npy"]
   BATCH_SIZE: 32
   MMAP_MODE: True
   DEFAULT_GRAY_IMG_SIZE: 96
@@ -46,7 +46,7 @@ TRAINER:
 
 OPTIMIZER:
   TYPE: "sgd"
-  BASE_LR: 0.01
+  BASE_LR: 0.001
   WEIGHT_DECAY: 0.0001
   KWARGS: {'momentum': 0.9, 'dampening': 0, 'nesterov': True}
 
@@ -55,6 +55,6 @@ SCHEDULER:
   KWARGS: {'step_size': 30, 'gamma': 0.1}
 
 CHECKPOINT:
-  DIR: "./checkpoint_no_unsupervised"
+  DIR: "./checkpoint/supervised_vgg_test"
 
 VERBOSE: True
