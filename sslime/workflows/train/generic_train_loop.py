@@ -50,6 +50,4 @@ def generic_train_loop(train_loader, model, criterion, optimizer, scheduler, plo
     logger.info(f"Epoch: {i_epoch + 1}. Train Stats")
     for meter in train_meters:
         logger.info(meter)
-        value = meter.value
-        value = value['top_1'] if isinstance(value, dict) else value
-        plotter.plot(meter.name, 'train', i_epoch + 1, value)
+        plotter.plot(meter.name, 'train', i_epoch + 1, meter.value)

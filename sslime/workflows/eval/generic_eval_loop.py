@@ -35,6 +35,4 @@ def generic_eval_loop(val_loader, model, plotter, i_epoch):
     logger.info("Epoch: {}. Validation Stats".format(i_epoch + 1))
     for meter in eval_meters:
         logger.info(meter)
-        value = meter.value
-        value = value['top_1'] if isinstance(value, dict) else value
-        plotter.plot(meter.name, 'val', i_epoch + 1, value)
+        plotter.plot(meter.name, 'val', i_epoch + 1, meter.value)

@@ -1,0 +1,77 @@
+TRAIN:
+  DATA_SOURCES: [disk]
+  DATA_PATHS: ["data/train_images_0.npy"]
+  LABEL_SOURCES: [disk]
+  LABEL_PATHS: ["data/train_labels_0.npy"]
+  DEFAULT_GRAY_IMG_SIZE: 96
+  BATCH_SIZE: 64
+  TRANSFORMS: [
+    ["RandomHorizontalFlip"],
+    ["ToTensor"],
+    ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
+  ]
+
+TEST:
+  DATA_SOURCES: [disk]
+  DATA_PATHS: ["data/test_images.npy"]
+  LABEL_SOURCES: [disk]
+  LABEL_PATHS: ["data/test_labels.npy"]
+  BATCH_SIZE: 64
+  TRANSFORMS: [
+    ["ToTensor"],
+    ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
+  ]
+
+
+MODEL:
+  TRUNK:
+    TYPE: "resnet50"
+    SHOULD_FLATTEN: False
+    LINEAR_FEAT_POOL_OPS: [
+        ["AvgPool2d", [[5, 5], 5, 2]],
+        ["AvgPool2d", [[8, 8], 4, 1]],
+        ["AvgPool2d", [[7, 7], 3, 0]],
+        ["AvgPool2d", [[4, 4], 2, 0]],
+        ["AvgPool2d", [[3, 3], 1, 0]],
+    ]
+  HEAD:
+    PARAMS: [
+      ["eval_mlp", {"in_channels": 64, "dims": [6400, 10]}],
+      ["eval_mlp", {"in_channels": 256, "dims": [6400, 10]}],
+      ["eval_mlp", {"in_channels": 512, "dims": [2048, 10]}],
+      ["eval_mlp", {"in_channels": 1024, "dims": [4096, 10]}],
+      ["eval_mlp", {"in_channels": 2048, "dims": [2048, 10]}],
+    ]
+    APPLY_BATCHNORM: True
+  FEATURE_EVAL_MODE: True
+  EVAL_FEATURES: ["conv1", "res2", "res3", "res4", "res5"]
+
+# Training Parameters
+TRAINER:
+  TRAIN_LOOP: "generic_train_loop"
+  TRAIN_METERS: {"accuracy_list": {"num_list": 5, "topk": [1]}, "loss": {}}
+  EVAL_LOOP: "generic_eval_loop"
+  EVAL_METERS: {"accuracy_list": {"num_list": 5, "topk": [1]}, "loss": {}}
+  MAX_EPOCHS: 100
+  NUM_WORKERS: 45
+
+
+OPTIMIZER:
+  TYPE: "sgd"
+  BASE_LR: 0.001
+  WEIGHT_DECAY: 0.0005
+  KWARGS: {'momentum': 0.9, 'dampening': 0, 'nesterov': True}
+
+SCHEDULER:
+  TYPE: "step"
+  KWARGS: {'step_size': 30, 'gamma': 0.1}
+
+CHECKPOINT:
+  DIR: "./checkpoint/eval_resnet_rotation"
+  FEATURE_EXTRACTOR_PARAMS: "./checkpoint/pretext_resnet_rotation/model_epoch_0049.pyth"
+
+VISDOM:
+  ENV: "eval_resnet"
+  CONFIG: {"server": "log-0"}
+
+VERBOSE: True

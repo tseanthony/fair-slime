@@ -16,6 +16,12 @@ class VisdomLinePlotter(object):
 
     def plot(self, var_name, split_name, x, y, title=None):
         if not self.viz: return
+        if isinstance(y, dict):
+            y = y['top_1']
+            if isinstance(y, (tuple, list)):
+                y = max(y)
+        if not isinstance(y, (int, float)): return
+
         if var_name not in self.plots:
             self.plots[var_name] = self.viz.line(
                 X=np.array([x,x]), Y=np.array([y,y]), env=self.env, opts=dict(
