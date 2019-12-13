@@ -20,7 +20,7 @@ class BaseImageSSLModel(nn.Module):
         if cfg.MODEL.FEATURE_EVAL_MODE:
             self.trunk = FeatureExtractorModel()
         else:
-            self.trunk = TRUNKS[cfg.MODEL.TRUNK.TYPE]()
+            self.trunk = TRUNKS[cfg.MODEL.TRUNK.TYPE](**cfg.MODEL.TRUNK.KWARGS)
         self.clf_heads = nn.ModuleList()
         for (head_type, kwargs) in cfg.MODEL.HEAD.PARAMS:
             self.clf_heads.append(HEADS[head_type](**kwargs))
