@@ -6,10 +6,12 @@ TRAIN:
   BATCH_SIZE: 256
   DEFAULT_GRAY_IMG_SIZE: 96
   TRANSFORMS: [
-      ["ssl_rotate", {"indices": [0]}],
-      ["RandomHorizontalFlip"],
-      ["ToTensor"],
-      ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
+    ["RandomCrop", {"args": [75]}],
+    ["RandomRotation", {"args": [10]}],
+    ["RandomHorizontalFlip"],
+    ["ssl_rotate", {"indices": [0]}],
+    ["ToTensor"],
+    ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
   ]
 
 TEST:
@@ -20,6 +22,7 @@ TEST:
   BATCH_SIZE: 128
   DEFAULT_GRAY_IMG_SIZE: 96
   TRANSFORMS: [
+    ["CenterCrop", {"args": [75]}],
     ["ssl_rotate", {"indices":[0]}],
     ["ToTensor"],
     ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
@@ -30,7 +33,7 @@ MODEL:
   TRUNK:
     TYPE: "vgg_a"
   HEAD:
-    PARAMS: [["eval_mlp", {"in_channels": 512, "dims": [4608, 4]}]]
+    PARAMS: [["eval_mlp", {"in_channels": 512, "dims": [2048, 4]}]]
     APPLY_BATCHNORM: True
   FEATURE_EVAL_MODE: False
   EVAL_FEATURES: []
@@ -41,7 +44,7 @@ TRAINER:
   TRAIN_METERS: {"accuracy": {"topk": [1]}, "loss": {}}
   EVAL_LOOP: "generic_eval_loop"
   EVAL_METERS: {"accuracy": {"topk": [1]}, "loss": {}}
-  MAX_EPOCHS: 30
+  MAX_EPOCHS: 100
   NUM_WORKERS: 20
 
 OPTIMIZER:
@@ -55,7 +58,7 @@ SCHEDULER:
   KWARGS: {'step_size': 25, 'gamma': 0.1}
 
 CHECKPOINT:
-  DIR: "./checkpoint/pretext_vgg"
+  DIR: "./checkpoint/pretext_vgg_aug"
 
 VISDOM:
   ENV: "pretext_vgg"

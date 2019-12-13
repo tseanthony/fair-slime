@@ -16,6 +16,8 @@ TORCHVISION_TRANSFORMS = {
     "Normalize": transforms.Normalize,
     "RandomHorizontalFlip": transforms.RandomHorizontalFlip,
     "RandomResizedCrop": transforms.RandomResizedCrop,
+    "RandomRotation": transforms.RandomRotation,
+    "RandomCrop": transforms.RandomCrop,
     "Resize": transforms.Resize,
     "ToTensor": transforms.ToTensor,
     "ToPILImage": transforms.ToPILImage,

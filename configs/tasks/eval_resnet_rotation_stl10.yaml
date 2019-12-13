@@ -6,6 +6,8 @@ TRAIN:
   DEFAULT_GRAY_IMG_SIZE: 96
   BATCH_SIZE: 64
   TRANSFORMS: [
+    ["RandomCrop", {"args": [75]}],
+    ["RandomRotation", {"args": [10]}],
     ["RandomHorizontalFlip"],
     ["ToTensor"],
     ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
@@ -18,6 +20,7 @@ TEST:
   LABEL_PATHS: ["data/test_labels.npy"]
   BATCH_SIZE: 64
   TRANSFORMS: [
+    ["CenterCrop", {"args": [75]}],
     ["ToTensor"],
     ["Normalize", {"args": [[0.44671062, 0.43980984, 0.40664645], [0.26034098, 0.25657727, 0.27126738]]}],
   ]
@@ -36,10 +39,10 @@ MODEL:
     ]
   HEAD:
     PARAMS: [
-      ["eval_mlp", {"in_channels": 64, "dims": [6400, 10]}],
-      ["eval_mlp", {"in_channels": 256, "dims": [6400, 10]}],
+      ["eval_mlp", {"in_channels": 64, "dims": [4096, 10]}],
+      ["eval_mlp", {"in_channels": 256, "dims": [4096, 10]}],
       ["eval_mlp", {"in_channels": 512, "dims": [2048, 10]}],
-      ["eval_mlp", {"in_channels": 1024, "dims": [4096, 10]}],
+      ["eval_mlp", {"in_channels": 1024, "dims": [1024, 10]}],
       ["eval_mlp", {"in_channels": 2048, "dims": [2048, 10]}],
     ]
     APPLY_BATCHNORM: True
@@ -52,26 +55,32 @@ TRAINER:
   TRAIN_METERS: {"accuracy_list": {"num_list": 5, "topk": [1]}, "loss": {}}
   EVAL_LOOP: "generic_eval_loop"
   EVAL_METERS: {"accuracy_list": {"num_list": 5, "topk": [1]}, "loss": {}}
-  MAX_EPOCHS: 100
+  MAX_EPOCHS: 120
   NUM_WORKERS: 45
 
 
 OPTIMIZER:
-  TYPE: "sgd"
+  # TYPE: "sgd"
+  # BASE_LR: 0.001
+  # WEIGHT_DECAY: 0.0005
+  # KWARGS: {'momentum': 0.9, 'dampening': 0, 'nesterov': True}
+  TYPE: "adam"
   BASE_LR: 0.001
-  WEIGHT_DECAY: 0.0005
-  KWARGS: {'momentum': 0.9, 'dampening': 0, 'nesterov': True}
+  WEIGHT_DECAY: 0.0
 
 SCHEDULER:
-  TYPE: "step"
-  KWARGS: {'step_size': 30, 'gamma': 0.1}
+  # TYPE: "step"
+  # KWARGS: {'step_size': 30, 'gamma': 0.1}
+  TYPE: "plateau"
+  KWARGS: {"patience": 3, "verbose": True, "threshold": .01}
+  STEP_METERS: ["loss"]
 
 CHECKPOINT:
-  DIR: "./checkpoint/eval_resnet_rotation"
-  FEATURE_EXTRACTOR_PARAMS: "./checkpoint/pretext_resnet_rotation/model_epoch_0049.pyth"
+  DIR: "./checkpoint/eval_resnet_aug"
+  FEATURE_EXTRACTOR_PARAMS: "./checkpoint/pretext_resnet_aug/model_epoch_0120.pyth"
 
 VISDOM:
-  ENV: "eval_resnet"
+  ENV: "eval_resnet_aug"
   CONFIG: {"server": "log-0"}
 
 VERBOSE: True
