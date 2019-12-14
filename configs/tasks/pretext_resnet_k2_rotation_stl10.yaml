@@ -43,7 +43,7 @@ TRAINER:
   TRAIN_METERS: {"accuracy": {"topk": [1]}, "loss": {}}
   EVAL_LOOP: "generic_eval_loop"
   EVAL_METERS: {"accuracy": {"topk": [1]}, "loss": {}}
-  MAX_EPOCHS: 120
+  MAX_EPOCHS: 300
 
 OPTIMIZER:
   TYPE: "adam"
@@ -54,14 +54,14 @@ SCHEDULER:
   # TYPE: "step"
   # KWARGS: {'step_size': 30, 'gamma': 0.1}
   TYPE: "plateau"
-  KWARGS: {"patience": 3, "verbose": True, "threshold": .01}
+  KWARGS: {"patience": 10, "verbose": True, "threshold": .01}
   STEP_METERS: ["loss"]
 
 CHECKPOINT:
-  DIR: "./checkpoint/pretext_resnet_aug"
+  DIR: "./checkpoint/pretext_resnet_k2"
 
 VISDOM:
-  ENV: "pretext_resnet_aug"
+  ENV: "pretext_resnet_k2"
   CONFIG: {"server": "log-0"}
 
 VERBOSE: True
