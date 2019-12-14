@@ -16,10 +16,12 @@ class ResNet50(nn.Module):
     """Wrapper for TorchVison ResNet50 Model
     This was needed to remove the final FC Layer from the ResNet Model"""
 
+    block = models.Bottleneck
+
     def __init__(self, k=1):
         super(ResNet50, self).__init__()
         kwargs = {'width_per_group': 64 * k, 'pretrained':False, 'progress':True}
-        model = models._resnet('resnet50', models.Bottleneck, [3, 4, 6, 3], **kwargs)
+        model = models._resnet('resnet50', self.block, [3, 4, 6, 3], **kwargs)
         conv1 = nn.Sequential(model.conv1, model.bn1, model.relu)
 
         self._feature_blocks = nn.ModuleList(
@@ -62,3 +64,38 @@ class ResNet50(nn.Module):
                 out_feats[out_feat_keys.index(key)] = feat
 
         return out_feats
+
+
+class BottleneckV2(models.Bottleneck):
+    def __init__(self, inplanes, planes, *args, **kwargs):
+        super(BottleneckV2, self).__init__(inplanes, planes, *args, **kwargs)
+        self.bn1, self.bn3 = nn.BatchNorm2d(inplanes), self.bn1
+
+    def forward(self, x, no_shortcut=False):
+        identity = x
+
+        out = self.bn1(x)
+        out = self.relu(out)
+        out = self.conv1(out)
+
+        out = self.bn2(out)
+        out = self.relu(out)
+        out = self.conv2(out)
+
+        out = self.bn3(out)
+        out = self.relu(out)
+        out = self.conv3(out)
+
+        if no_shortcut:
+            return out
+
+        if self.downsample is not None:
+            identity = self.downsample(x)
+
+        out += identity
+
+        return out
+
+
+class ResNet50V2(ResNet50):
+    block = BottleneckV2
