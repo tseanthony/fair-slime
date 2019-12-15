@@ -41,7 +41,7 @@ TRAINER:
   TRAIN_METERS: {"accuracy": {"topk": [1]}, "loss": {}}
   EVAL_LOOP: "generic_eval_loop"
   EVAL_METERS: {"accuracy": {"topk": [1]}, "loss": {}}
-  MAX_EPOCHS: 300
+  MAX_EPOCHS: 250
 
 OPTIMIZER:
   TYPE: "adam"
