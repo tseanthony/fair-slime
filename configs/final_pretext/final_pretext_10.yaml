@@ -31,7 +31,7 @@ MODEL:
     TYPE: "revnet50"
     KWARGS: {'k': 2}
   HEAD:
-    PARAMS: [["mlp", {"dims": [2048, 4]}]]
+    PARAMS: [["mlp", {"dims": [4096, 4]}]]
     APPLY_BATCHNORM: True
   FEATURE_EVAL_MODE: False
   EVAL_FEATURES: []
