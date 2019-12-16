@@ -30,6 +30,8 @@ class MLP(nn.Module):
             layers.append(nn.ReLU(inplace=True))
             last_dim = dim
 
+        if cfg.MODEL.HEAD.DROPOUT_P != 0:
+            layers.append(nn.Dropout(p=cfg.MODEL.HEAD.DROPOUT_P))
         layers.append(nn.Linear(last_dim, dims[-1]))
 
         self.clf = nn.Sequential(*layers)
