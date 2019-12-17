@@ -66,7 +66,7 @@ OPTIMIZER:
   # KWARGS: {'momentum': 0.9, 'dampening': 0, 'nesterov': True}
   TYPE: "adam"
   BASE_LR: 0.001
-  WEIGHT_DECAY: 0.0
+  WEIGHT_DECAY: 0.0005
 
 SCHEDULER:
   # TYPE: "step"
@@ -77,7 +77,7 @@ SCHEDULER:
 
 CHECKPOINT:
   DIR: "./checkpoint/final_eval_revnet_k1"
-  FEATURE_EXTRACTOR_PARAMS: "./checkpoint/final_revnev_1/model_epoch_0250.pyth"
+  FEATURE_EXTRACTOR_PARAMS: "./checkpoint/final_revnev_1/model_epoch_0237.pyth"
 
 VISDOM:
   ENV: "final_eval_revnet_1"
