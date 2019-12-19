@@ -28,7 +28,7 @@ TEST:
 
 MODEL:
   TRUNK:
-    TYPE: "resnetv2"
+    TYPE: "resnet50v2"
     SHOULD_FLATTEN: False
     LINEAR_FEAT_POOL_OPS: [
         ["AvgPool2d", [[5, 5], 5, 2]],
