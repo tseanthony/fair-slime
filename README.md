@@ -9,8 +9,10 @@ each experiment has its own yaml file. to run yaml file,
 
 To train the models for our best model (VGG19)
 
+```
 PYTHONPATH=fair-sslime python fair-sslime/tools/train.py --config_file fair-sslime/configs/final_eval/final_eval_3.yaml
 PYTHONPATH=fair-sslime python fair-sslime/tools/train.py --config_file fair-sslime/configs/final_pretext/final_pretext_13.yaml
+```
 
 For other experiments, yaml files will be in the following folders:
 
