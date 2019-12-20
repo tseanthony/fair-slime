@@ -1,41 +1,33 @@
-# FAIR SSLIME
+To reproduce results:
 
-## Introduction
-We present Self-Supervised Learning Integrated Multi-modal Environment (SSLIME), a toolkit based on PyTorch that aims to accelerate research cycle in self-supervised learning: from designing a new self-supervised task to evaluating the learned representations. The toolkit treats multiple data modalities (images, videos, audio, text) as first class citizens. The toolkit aims to provide reference implementations of several self-supervised pretext tasks and also provides an extensive benchmark suite for evaluating self-supervised representations. The toolkit is designed to be easily reusable, extensible and enable reproducible research. The toolkit also aims to support efficient distributed training across multiple nodes to facilitate research on Facebook scale data.
-
-<p align="center">
-  <img src="demo/framework_components.png" alt="Framework Components" title="Framework Components"/>
-</p>
-
-<p align="center">
-  <img src="demo/framework_features.png" alt="Framework Features" title="Framework Features"/>
-</p>
-
-Currently, the toolkit supports the Rotation [1] Pretext task and evaluation of features from different layers. Support for Jigsaw, Colorization and DeepCluster pretext tasks will be added in the coming months.
-
-## Installation
-
-Please find installation instructions in [`INSTALL.md`](INSTALL.md).
-
-## Getting Started
-See [`STL10.md`](STL10.md) for how to setup and run on stl 10
-
-
-## License
-
-sslime is CC-NC 4.0 International licensed, as found in the LICENSE file.
-
-## Citation
-
-If you use sslime in your research, please use the following BibTeX entry.
-
+First install sslime and download STL-10, then install visdom:
 ```
-@article{sslime2019,
-  title={SSLIME: A Toolkit for Multi-Modal Self-Supervised Training and Benchmarking},
-  author={Bhooshan, Suvrat and Misra, Ishan and Fergus, Rob and Goyal, Priya},
-  year={2019}
-}
+pip install visdom
 ```
 
-## References
-- Gidaris, Spyros, Praveer Singh, and Nikos Komodakis. "Unsupervised representation learning by predicting image rotations." arXiv preprint arXiv:1803.07728 (2018).
+each experiment has its own yaml file. to run yaml file,  
+
+To train the models for our best model (VGG19)
+
+PYTHONPATH=fair-sslime python fair-sslime/tools/train.py --config_file fair-sslime/configs/final_eval/final_eval_3.yaml
+PYTHONPATH=fair-sslime python fair-sslime/tools/train.py --config_file fair-sslime/configs/final_pretext/final_pretext_13.yaml
+
+For other experiments, yaml files will be in the following folders:
+
+Downstream evaluation:
+fair-sslime/configs/final_eval/
+
+Pretext tasks:
+fair-sslime/configs/final_pretext/
+
+Preprocess screening:
+fair-sslime/configs/preprocess
+
+link to model checkpoints: 
+  VGG: https://drive.google.com/open?id=16XQuysAAn0n56JSL1j-m7_91iMdtABCz
+  
+to see our implementation of the TRUNK for the jigsaw model:
+fair-sslime/sslime/models/trunks/alexnet_jigsaw.py
+
+to see our implementation of the TRUNK for the revnet model:
+fair-sslime/sslime/models/trunks/revnet50.py
